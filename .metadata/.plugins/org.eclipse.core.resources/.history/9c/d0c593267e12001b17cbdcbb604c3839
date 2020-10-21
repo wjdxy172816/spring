@@ -1,0 +1,11 @@
+package com.spring.test;
+
+public class B extends A{
+	
+
+	public static void main(String[] args) {
+		B b =new B();
+		Class clazz =b.getClass();
+		Filed field =clazz.getDeclaredField("abc");
+	}
+}

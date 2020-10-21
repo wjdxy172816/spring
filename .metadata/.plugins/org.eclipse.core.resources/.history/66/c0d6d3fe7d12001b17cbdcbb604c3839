@@ -1,0 +1,9 @@
+package com.spring.test;
+
+public class B extends A{
+	
+
+	public static void main(String[] args) {
+		
+	}
+}

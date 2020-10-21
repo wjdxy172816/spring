@@ -1,0 +1,78 @@
+package com.spring.controller;
+
+import java.io.IOException;
+
+import javax.servlet.http.HttpServletResponse;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
+
+import com.spring.pojo.UserInfo;
+//必须添加该注解，表示是控制器，不再像以前那样必须继承自Servlet类了。组件会自动扫描该注解标记的类
+@Controller
+public class HelloController {
+	//同时指定映射关系，要指定一个值，当请求这个控制器时，请求的路径就是以这个值
+	@RequestMapping("/hello")
+	public String hello() {
+		System.out.println("hello request!!");
+		//返回的字符串，如果再配置文件中指定了解析jsp的相关配置，那么当请求这个路径返回的内容就是渲染后的对应的jsp文件
+		//需要注意的是，返回的字符串就是这个jsp的名称。即 返回字符串.jsp，不保持这个关系，那么请求的时候返回的内容就会报错
+		return "hello";
+	}
+	
+	@RequestMapping("/reg")
+	public String reg(String name) {//这个参数是请求URL中的参数,框架会根据具体情况把这个参数通过形参的形式传递到这个方法中来
+		System.out.println("reg request!!! "+name);
+		return "result";
+	}
+	//请求链接为127.0.0.1:8080/springMVC_demo/regMv.action?name=Alex
+	@RequestMapping("/regMv")
+	public ModelAndView regByMV(String name) {
+		//如果需要把传入的参数name返回给调用者,那么就要用到ModelAndView;
+		ModelAndView mv =new ModelAndView();
+		mv.setViewName("result");//设置视图的名称,即这个action对应的jsp页面的名称，他应该与reg方法返回的这个字符串保持一致,否则就无法解析。
+		mv.addObject("name", name);//设置一个键值对,用于给jsp页面提供数据,jsp页面就通过key值获取到对应的value
+		return mv;
+	}
+	//如果传递的值有多个，那么我们可以通过扩展对应的参数列表来接收这些参数，但是如果参数特别多，那么会显得非常臃肿，因此在面对多个参数的传入的时候，我们可以通过参数绑定来实现
+	//SpringMVC可以完成参数绑定的参数类型有：基本类型，POJO类型，数组类型，集合类型
+	//info中的对应字段的值则是由regist.jsp页面中提交上来的完成赋值
+	@RequestMapping("/regByPojo")
+	public ModelAndView regByPojo(UserInfo info) {
+		System.out.println(info);
+		ModelAndView mv =new ModelAndView();
+		mv.setViewName("resultByPojo");
+		mv.addObject("uinfo", info);
+		return mv;
+	}
+	//上面几种方式就是获取传递给服务器的数据
+	//SpringMVC响应结果可以使用视图解析器完成页面的跳转,也可以直接把返回结果写到浏览器
+	
+	@RequestMapping("/redirectReq")
+	public String redirectReq() {
+		return "redirect:redirect.jsp";//返回结构为关键字:  redirect:内部的jsp页面名称
+	}
+	//也可以通过视图转化器完成解析
+	@RequestMapping("/modelRedirectReq")
+	public ModelAndView redirctByModel() {
+		ModelAndView mv =new ModelAndView();
+		mv.setViewName("redirectByModelReq");//重定向到redirectByModelReq.jsp
+		mv.addObject("key", "value");
+		return mv;
+	}
+	//通过侵入Servlet的API进行字符串返回
+	@RequestMapping("/requestGetString")
+	public void requestGetString(HttpServletResponse resp) throws IOException {
+		//需要设置响应头，避免乱码
+		resp.setContentType("text/html;charset=utf-8");
+		resp.getWriter().write("这是返回结果");
+	}
+	//直接返回字符串
+	@RequestMapping("/requestGetStringByAnno")
+	@ResponseBody//这个注解的作用是表明当前方法的返回至会绑定到响应体中.这个注解可以用在方法上，也可以用在类上。
+	public String requestGetStringByAnno() {
+		return "这是直接返回内容,此时他就不会再把返回的内容映射成对应的jsp页面，而是直接将结果返回到浏览器上";
+	}
+}

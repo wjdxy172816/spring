@@ -1,0 +1,8 @@
+package com.spring.pojo;
+
+public class UserInfo {
+
+	public int uid;
+	public String uname;
+	public int age;
+}

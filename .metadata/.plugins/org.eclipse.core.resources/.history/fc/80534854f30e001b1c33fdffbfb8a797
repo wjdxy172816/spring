@@ -1,0 +1,19 @@
+package com.spring.controller;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import com.spring.pojo.ProductInfo;
+
+@Controller
+@RequestMapping("/product")
+public class ProductController {
+	@RequestMapping("/getInfo/{id}")
+	public ProductInfo getProductInfo(@PathVariable int id) {
+		ProductInfo info =new ProductInfo();
+		info.setId(id);
+		info.setDesc("这是一段吹牛逼的话,听完就行了");
+		return info;
+	}
+}

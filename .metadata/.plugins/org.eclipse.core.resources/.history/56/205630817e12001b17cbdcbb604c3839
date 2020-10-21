@@ -1,0 +1,17 @@
+package com.spring.test;
+
+import java.lang.reflect.Field;
+
+public class B extends A{
+	
+
+	public static void main(String[] args) throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
+		B b =new B();
+		b.printAbc();
+		Class<?> clazz =b.getParent().getClass();
+		Field field =clazz.getField("abc");
+		field.setAccessible(true);
+		field.set(b, "bcd");
+		b.printAbc();
+	}
+}

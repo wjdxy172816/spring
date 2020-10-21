@@ -1,0 +1,34 @@
+package com.spring.test;
+
+import java.lang.reflect.Field;
+
+public class B extends C{
+	
+
+	public static void main(String[] args) throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
+		B b =new B();
+		b.printAbc();
+		Class<?> clazz =b.getClass();
+		Field[] fields =clazz.getDeclaredFields();
+		boolean find =false;
+		Field findF;
+		while(!find) {
+			for(Field each:fields) {
+				if("abc".equals(each.getName())) {
+					find =true;
+					findF =each;
+					break;
+				}
+			}
+			clazz =clazz.getSuperclass();
+			fields =clazz.getDeclaredFields();
+		}
+		if(findF!=null) {
+			
+		}
+		Field field =clazz.getDeclaredField("abc");
+		field.setAccessible(true);
+		field.set(b, "bcd");
+		b.printAbc();
+	}
+}

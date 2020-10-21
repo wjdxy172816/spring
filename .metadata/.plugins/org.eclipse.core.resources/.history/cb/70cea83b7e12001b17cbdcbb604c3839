@@ -1,0 +1,13 @@
+package com.spring.test;
+
+import java.lang.reflect.Field;
+
+public class B extends A{
+	
+
+	public static void main(String[] args) throws NoSuchFieldException, SecurityException {
+		B b =new B();
+		Class clazz =b.getClass();
+		Field field =clazz.getDeclaredField("abc");
+	}
+}

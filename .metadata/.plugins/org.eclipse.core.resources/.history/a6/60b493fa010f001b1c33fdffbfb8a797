@@ -1,0 +1,19 @@
+package com.spring.controller;
+
+import java.io.File;
+import java.io.IOException;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.multipart.MultipartFile;
+
+@Controller
+@RequestMapping("/upload")
+public class FileUploadController {
+	@RequestMapping("/fileUpload")
+	public String upload(MultipartFile file) throws IllegalStateException, IOException {
+		File fi =new File("G:\\upload_file\\"+file.getOriginalFilename());
+		file.transferTo(fi);
+		return "uploadSucced";
+	}
+}
